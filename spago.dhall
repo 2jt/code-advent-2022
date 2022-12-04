@@ -23,6 +23,7 @@ to generate this file without the comments in this block.
   , "maybe"
   , "node-buffer"
   , "node-fs"
+  , "ordered-collections"
   , "prelude"
   , "strings"
   , "unsafe-coerce"

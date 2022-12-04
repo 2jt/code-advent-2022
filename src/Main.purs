@@ -2,12 +2,16 @@ module Main where
 
 import Prelude
 
+import Data.Array (catMaybes, concat, length, range, splitAt, zip)
 import Data.Foldable (foldr, maximum)
 import Data.Int (fromString)
 import Data.List (List(..), fold, head, sort, tail, takeEnd, (:))
+import Data.Map (fromFoldable, lookup)
 import Data.Maybe (fromMaybe)
 import Data.Monoid.Additive (Additive(..))
+import Data.Set as Set
 import Data.String (Pattern(..), split)
+import Data.String.CodeUnits (toCharArray)
 import Effect (Effect)
 import Effect.Console (log)
 import Node.Encoding (Encoding(..))
@@ -71,7 +75,25 @@ day2part2 = do
      _ -> 0
           
 
+day3part1 :: Effect Unit
+day3part1 = do
+  readTextFile UTF8 "input-day-3.txt" <#> split (Pattern "\n")
+   >>= map f
+    >>> concat
+    >>> catMaybes
+    >>> foldr (+) 0
+    >>> show >>> log
+  where
+  alphabet = [ 'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z',
+               'A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z' ]  
+  m = fromFoldable (zip alphabet (range 1 52))
+  f =
+    toCharArray >>> (\i -> splitAt ((length i)/2) i)
+    >>> (\i -> Set.fromFoldable i.before `Set.intersection` Set.fromFoldable i.after)
+    >>> Set.toUnfoldable
+    >>> map (flip lookup m)
+
 main :: Effect Unit
-main = day2part2
+main = day3part1
 
 
