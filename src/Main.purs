@@ -3,7 +3,7 @@ module Main where
 import Prelude
 
 import Data.Maybe (Maybe(..), fromMaybe)
-import Day5 (day5part1)
+import Day5 (day5part1, day5part2)
 import Effect (Effect)
 import Effect.Class.Console (logShow)
 
@@ -17,6 +17,5 @@ main =
   -- *> day3part2
   -- *> day4part1
   -- *> day4part2
-  -- logShow $ fromMaybe [["..."]] (do
-  --   Just [["lalalal"]])  
-  day5part1
+  -- *> day5part1
+  day5part2

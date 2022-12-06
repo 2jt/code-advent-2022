@@ -12,8 +12,8 @@ import Effect.Class.Console (logShow)
 import Node.Encoding (Encoding(..))
 import Node.FS.Sync (readTextFile)
 
-parseRow :: String -> Array String
-parseRow s = f [] s
+parseStackRow :: String -> Array String
+parseStackRow s = f [] s
   where
   f arr "" = arr
   f arr s' = f (snoc arr (drop 1 s' # take 1)) (drop 4 s')
@@ -24,11 +24,11 @@ parseCommand s = split (Pattern " ") s # f
   f [ _, howMany, _, from, _, to ] = [ howMany, from, to ] <#> fromString # catMaybes
   f _ = []
 
-day5part1 :: Effect Unit
-day5part1 = do
+solve :: (Array String -> Array String) -> Effect Unit
+solve fn = do
   input <- readTextFile UTF8 "inputs/input-day-5" <#> split (Pattern "\n")
   let
-    stack = Arr.take 8 input # Arr.reverse # map parseRow # transpose # map (Arr.filter ((/=) " "))
+    stack = Arr.take 8 input # Arr.reverse # map parseStackRow # transpose # map (Arr.filter ((/=) " "))
     commands = Arr.drop 10 input # map parseCommand
     ans = foldl f stack commands # map Arr.last # catMaybes # joinWith mempty
   logShow ans
@@ -36,7 +36,7 @@ day5part1 = do
   f stack [ howMany, from, to ] = fromMaybe []
     ( do
         fromCol <- stack !! (from - 1)
-        let itemsFromCol = Arr.takeEnd howMany fromCol # Arr.reverse
+        let itemsFromCol = Arr.takeEnd howMany fromCol # fn
         let itemsNewFromCol = Arr.dropEnd howMany fromCol
         toCol <- stack !! (to - 1)
         let itemsNewToCol = toCol <> itemsFromCol
@@ -44,5 +44,8 @@ day5part1 = do
     )
   f _ _ = []
 
+day5part1 :: Effect Unit
+day5part1 = solve Arr.reverse
+
 day5part2 :: Effect Unit
-day5part2 = pure unit
+day5part2 = solve identity
