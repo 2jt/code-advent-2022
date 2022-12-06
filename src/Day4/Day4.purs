@@ -15,35 +15,41 @@ import Node.FS.Sync (readTextFile)
 day4part1 :: Effect Unit
 day4part1 = do
   readTextFile UTF8 "input-day-4" <#> split (Pattern "\n")
-    >>= map (split (Pattern ",")
-             >>> map (split (Pattern "-"))
-             >>> concat >>> map fromString
-             >>> catMaybes
-             >>> f
-             )
-        >>> sum 
+    >>=
+      map
+        ( split (Pattern ",")
+            >>> map (split (Pattern "-"))
+            >>> concat
+            >>> map fromString
+            >>> catMaybes
+            >>> f
+        )
+        >>> sum
         >>> logShow
   where
-  f [a, b, x, y] = if Set.subset s1 s2 || Set.subset s2 s1  then 1 else 0
+  f [ a, b, x, y ] = if Set.subset s1 s2 || Set.subset s2 s1 then 1 else 0
     where
-    s1 = Set.fromFoldable (range a b) 
+    s1 = Set.fromFoldable (range a b)
     s2 = Set.fromFoldable (range x y)
   f _ = 0
 
 day4part2 :: Effect Unit
 day4part2 = do
   readTextFile UTF8 "input-day-4" <#> split (Pattern "\n")
-    >>= map (split (Pattern ",")
-             >>> map (split (Pattern "-"))
-             >>> concat >>> map fromString
-             >>> catMaybes
-             >>> f
-             )
-        >>> sum 
+    >>=
+      map
+        ( split (Pattern ",")
+            >>> map (split (Pattern "-"))
+            >>> concat
+            >>> map fromString
+            >>> catMaybes
+            >>> f
+        )
+        >>> sum
         >>> logShow
   where
-  f [a, b, x, y] = if Set.isEmpty (Set.intersection s1 s2) then 0 else 1
+  f [ a, b, x, y ] = if Set.isEmpty (Set.intersection s1 s2) then 0 else 1
     where
-    s1 = Set.fromFoldable (range a b) 
+    s1 = Set.fromFoldable (range a b)
     s2 = Set.fromFoldable (range x y)
   f _ = 0
