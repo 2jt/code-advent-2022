@@ -26,7 +26,7 @@ parseCommand s = split (Pattern " ") s # f
 
 day5part1 :: Effect Unit
 day5part1 = do
-  input <- readTextFile UTF8 "input-day-5" <#> split (Pattern "\n")
+  input <- readTextFile UTF8 "inputs/input-day-5" <#> split (Pattern "\n")
   let
     stack = Arr.take 8 input # Arr.reverse # map parseRow # transpose # map (Arr.filter ((/=) " "))
     commands = Arr.drop 10 input # map parseCommand

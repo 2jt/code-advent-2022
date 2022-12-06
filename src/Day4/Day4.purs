@@ -14,7 +14,7 @@ import Node.FS.Sync (readTextFile)
 
 day4part1 :: Effect Unit
 day4part1 = do
-  readTextFile UTF8 "input-day-4" <#> split (Pattern "\n")
+  readTextFile UTF8 "inputs/input-day-4" <#> split (Pattern "\n")
     >>=
       map
         ( split (Pattern ",")
@@ -35,7 +35,7 @@ day4part1 = do
 
 day4part2 :: Effect Unit
 day4part2 = do
-  readTextFile UTF8 "input-day-4" <#> split (Pattern "\n")
+  readTextFile UTF8 "inputs/input-day-4" <#> split (Pattern "\n")
     >>=
       map
         ( split (Pattern ",")

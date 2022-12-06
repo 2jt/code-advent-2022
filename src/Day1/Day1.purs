@@ -14,7 +14,7 @@ import Node.FS.Sync (readTextFile)
 
 day1part1 :: Effect Unit
 day1part1 =
-  readTextFile UTF8 "input-day-1" <#> split (Pattern "\n")
+  readTextFile UTF8 "inputs/input-day-1" <#> split (Pattern "\n")
     >>= foldr f Nil >>> maximum >>> show >>> log
   where
   f "" list = 0 : list
@@ -22,7 +22,7 @@ day1part1 =
 
 day1part2 :: Effect Unit
 day1part2 =
-  readTextFile UTF8 "input-day-1" <#> split (Pattern "\n")
+  readTextFile UTF8 "inputs/input-day-1" <#> split (Pattern "\n")
     >>= foldr f Nil >>> sort >>> takeEnd 3 >>> sum >>> show >>> log
   where
   f "" list = 0 : list

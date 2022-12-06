@@ -74,7 +74,7 @@ charToNumberMap = fromFoldable (zip alphabet (range 1 52))
 
 day3part1 :: Effect Unit
 day3part1 = do
-  readTextFile UTF8 "input-day-3" <#> split (Pattern "\n")
+  readTextFile UTF8 "inputs/input-day-3" <#> split (Pattern "\n")
     >>= map f
       >>> concat
       >>> sum
@@ -89,7 +89,7 @@ day3part1 = do
 
 day3part2 :: Effect Unit
 day3part2 = do
-  readTextFile UTF8 "input-day-3" <#> split (Pattern "\n")
+  readTextFile UTF8 "inputs/input-day-3" <#> split (Pattern "\n")
     >>= f []
       >>> map
         ( map (toCharArray >>> Set.fromFoldable)

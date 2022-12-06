@@ -24,10 +24,10 @@ f = case _ of
 
 day2part1 :: Effect Unit
 day2part1 = do
-  readTextFile UTF8 "input-day-2" <#> split (Pattern "\n")
+  readTextFile UTF8 "inputs/input-day-2" <#> split (Pattern "\n")
     >>= map f >>> foldr (+) 0 >>> show >>> log
 
 day2part2 :: Effect Unit
 day2part2 = do
-  readTextFile UTF8 "input-day-2" <#> split (Pattern "\n")
+  readTextFile UTF8 "inputs/input-day-2" <#> split (Pattern "\n")
     >>= map f >>> foldr (+) 0 >>> show >>> log
