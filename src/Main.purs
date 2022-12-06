@@ -4,6 +4,7 @@ import Prelude
 
 import Data.Maybe (Maybe(..), fromMaybe)
 import Day5 (day5part1, day5part2)
+import Day6 (day6part1)
 import Effect (Effect)
 import Effect.Class.Console (logShow)
 
@@ -18,4 +19,5 @@ main =
   -- *> day4part1
   -- *> day4part2
   -- *> day5part1
-  day5part2
+  -- *> day5part2
+  day6part1
