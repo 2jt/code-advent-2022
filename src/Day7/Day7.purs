@@ -14,10 +14,10 @@ import Node.Encoding (Encoding(..))
 import Node.FS.Sync (readTextFile)
 
 parseLine :: (Int /\ Int /\ List Int) -> Array String -> (Int /\ Int /\ List Int)
-parseLine a@(sum /\ ans /\ list) arr = case arr of
+parseLine a@(sum /\ ans /\ list) = case _ of
   [ "$", "cd", ".." ] -> a
-  [ "$", "cd", _ ] -> (0 /\ (if sum <= 100000 then (sum + ans) else ans) /\ sum : list)
-  [ "dir", _ ] -> ((sum + (fromMaybe 0 $ head list)) /\ ans /\ drop 1 list)
+  [ "$", "cd", _ ] -> 0 /\ (if sum <= 100000 then (sum + ans) else ans) /\ sum : list
+  [ "dir", _ ] -> (sum + (fromMaybe 0 $ head list)) /\ ans /\ drop 1 list
   [ "$", "ls" ] -> a
   [ size, _ ] -> ((sum + (fromMaybe 0 $ fromString size)) /\ ans /\ list)
   _ -> a
