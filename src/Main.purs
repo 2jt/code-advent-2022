@@ -2,13 +2,11 @@ module Main where
 
 import Prelude
 
-import Data.Maybe (Maybe(..), fromMaybe)
 import Day1 (day1part2)
 import Day5 (day5part1, day5part2)
 import Day6 (day6part1, day6part2)
-import Day7 (day7part1)
+import Day7 (day7part1, day7part2)
 import Effect (Effect)
-import Effect.Class.Console (logShow)
 
 main :: Effect Unit
 main =
@@ -25,3 +23,4 @@ main =
   -- *> day6part1
   -- *> day6part2
   day7part1
+  *> day7part2
