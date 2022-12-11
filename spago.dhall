@@ -19,6 +19,7 @@ to generate this file without the comments in this block.
   , "effect"
   , "either"
   , "foldable-traversable"
+  , "identity"
   , "integers"
   , "lists"
   , "maybe"
@@ -26,7 +27,10 @@ to generate this file without the comments in this block.
   , "node-fs"
   , "ordered-collections"
   , "prelude"
+  , "refs"
   , "strings"
+  , "transformers"
+  , "tuples"
   , "unsafe-coerce"
   ]
 , packages = ./packages.dhall
