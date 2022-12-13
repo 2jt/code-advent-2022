@@ -6,7 +6,9 @@ import Day1 (day1part2)
 import Day5 (day5part1, day5part2)
 import Day6 (day6part1, day6part2)
 import Day7 (day7part1, day7part2)
+import Day8 (day8part1)
 import Effect (Effect)
+
 
 main :: Effect Unit
 main =
@@ -22,5 +24,6 @@ main =
   -- *> day5part2
   -- *> day6part1
   -- *> day6part2
-  day7part1
-  *> day7part2
+  -- *> day7part1
+  -- *> day7part2
+  day8part1
