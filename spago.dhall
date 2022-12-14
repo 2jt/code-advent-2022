@@ -25,6 +25,7 @@ to generate this file without the comments in this block.
   , "maybe"
   , "node-buffer"
   , "node-fs"
+  , "nonempty"
   , "ordered-collections"
   , "partial"
   , "prelude"
@@ -35,5 +36,5 @@ to generate this file without the comments in this block.
   , "unsafe-coerce"
   ]
 , packages = ./packages.dhall
-, sources = [ "src/**/*.purs", "test/**/*.purs" ]
+, sources = [ "src/**/*.purs" ]
 }
