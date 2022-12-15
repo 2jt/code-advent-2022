@@ -1,1 +1,1 @@
-* Code advent 2022 
+* Code advent 2022 in Purescript
