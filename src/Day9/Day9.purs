@@ -1,10 +1,10 @@
-module Day9 (day9part1) where
+module Day9 (day9part1, day9part2) where
 
 import Prelude
 
 import Data.Foldable (foldl)
 import Data.Int (fromString)
-import Data.List (List(..), length, nub, (:))
+import Data.List (List(..), head, length, nub, range, reverse, (:))
 import Data.Maybe (fromMaybe)
 import Data.Ord (abs)
 import Data.String (Pattern(..), split)
@@ -21,6 +21,9 @@ type Acc =
   { headPos :: Pos
   , tailPosHistory :: List Pos
   }
+
+initState :: List Pos
+initState = (0 /\ 0) : Nil
 
 int :: String -> Int
 int = fromMaybe 0 <<< fromString
@@ -57,9 +60,31 @@ day9part1 = do
     >>=
       foldl accumulate
         { headPos: 0 /\ 0
-        , tailPosHistory: ((0 /\ 0) : Nil)
+        , tailPosHistory: initState
         }
         >>> _.tailPosHistory
         >>> nub
         >>> length
         >>> logShow
+
+followPoint :: List Pos -> Pos -> List Pos
+followPoint list@(h : _) pos = case pos - h of
+  x /\ y
+    | abs x <= 1 && abs y <= 1 -> list
+    | otherwise -> ((h + ((abs x) / x /\ (abs y) / y)) : list)
+followPoint list _ = list
+
+day9part2 :: Effect Unit
+day9part2 =
+  readTextFile UTF8 "inputs/input-day-9" <#> split (Pattern "\n") <#> map (split (Pattern " "))
+    >>=
+      foldl accumulate
+        { headPos: 0 /\ 0
+        , tailPosHistory: initState
+        }
+        >>> _.tailPosHistory
+        >>> (\a -> foldl (\x _ -> foldl followPoint initState (reverse x)) a (range 2 9))
+        >>> nub
+        >>> length
+        >>> logShow
+

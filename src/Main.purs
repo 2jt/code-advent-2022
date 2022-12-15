@@ -7,7 +7,7 @@ import Day5 (day5part1, day5part2)
 import Day6 (day6part1, day6part2)
 import Day7 (day7part1, day7part2)
 import Day8 (day8part1, day8part2)
-import Day9 (day9part1)
+import Day9 (day9part1, day9part2)
 import Effect (Effect)
 
 
@@ -27,6 +27,7 @@ main =
   -- *> day6part2
   -- *> day7part1
   -- *> day7part2
-  -- day8part1
+  -- *> day8part1
   -- *> day8part2
-  day9part1
+  -- *> day9part1
+  day9part2
