@@ -12,31 +12,24 @@ to generate this file without the comments in this block.
 -}
 { name = "my-project"
 , dependencies =
-  [ "argonaut"
-  , "arrays"
+  [ "arrays"
   , "console"
   , "control"
   , "debug"
   , "effect"
   , "either"
   , "foldable-traversable"
-  , "identity"
   , "integers"
   , "lists"
   , "maybe"
   , "node-buffer"
   , "node-fs"
-  , "nonempty"
   , "numbers"
   , "ordered-collections"
   , "parsing"
-  , "partial"
   , "prelude"
-  , "refs"
   , "strings"
-  , "transformers"
   , "tuples"
-  , "unsafe-coerce"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs" ]

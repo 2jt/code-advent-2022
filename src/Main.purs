@@ -11,6 +11,7 @@ import Day7 (day7part1, day7part2)
 import Day8 (day8part1, day8part2)
 import Day9 (day9part1, day9part2)
 import Effect (Effect)
+import Effect.Class.Console (logShow)
 
 
 main :: Effect Unit
@@ -37,3 +38,4 @@ main =
   -- *> day10part2
   day11part1
   *> day11part2
+  
