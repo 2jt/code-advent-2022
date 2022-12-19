@@ -23,37 +23,38 @@ mapToElevation = case _ of
   'E' -> toCharCode 'z'
   a -> toCharCode a
 
-findS :: Array (Array Char) -> Int -> Pos /\ Char
-findS arr col = do
-  case arr !! col >>= findIndex (_ == 'S') of
-    Just xIndex -> (xIndex /\ col) /\ 'S'
-    Nothing -> findS arr (col + 1)
+findStart :: Char -> Array (Array Char) -> Int -> Pos /\ Char
+findStart c arr col = do
+  case arr !! col >>= findIndex (_ == c) of
+    Just xIndex -> (xIndex /\ col) /\ c
+    Nothing -> findStart c arr (col + 1)
 
-getNeighbour :: Array (Array Char) -> (Pos /\ Char) -> Pos -> Maybe (Pos /\ Char)
-getNeighbour arr (sp /\ sv) offset =
-  arr !! y >>= (_ !! x) >>= \n -> if (mapToElevation n - mapToElevation sv) <= 1 then Just ((x /\ y) /\ n) else Nothing
-  where
-  x /\ y = sp + offset
-
-solve :: Array (Array Char) -> Array (Pos /\ Char) -> Set (Pos /\ Char) -> Int -> Int
-solve arr queue s distance = do
+solve :: (Int -> Int -> Boolean) -> Char -> Array (Array Char) -> Array (Pos /\ Char) -> Set (Pos /\ Char) -> Int -> Int
+solve canJump target arr queue s distance = do
   let
-    q = (queue <#> \i -> fourDirs <#> getNeighbour arr i)
+    q = (queue <#> \i -> fourDirs <#> getNeighbours i)
       # concat
       # nub
       # catMaybes
       # filter \item -> Set.member item s # not
-  case flip find q \(_ /\ val) -> val == 'E' of
+  case flip find q \(_ /\ val) -> val == target of
     Just _ -> distance + 1
     Nothing ->
-      solve arr q (Set.union s $ Set.fromFoldable q) distance + 1
+      solve canJump target arr q (Set.union s $ Set.fromFoldable q) (distance + 1)
   where
   fourDirs = [ 1 /\ 0, -1 /\ 0, 0 /\ 1, 0 /\ -1 ]
+  getNeighbours (sp /\ sv) offset =
+    arr !! y >>= (_ !! x) >>= \n -> if canJump (mapToElevation n) (mapToElevation sv) then Just ((x /\ y) /\ n) else Nothing
+    where
+    x /\ y = sp + offset
 
 day12part1 :: Effect Unit
 day12part1 = do
   heatMap <- readTextFile UTF8 "inputs/input-day-12" <#> split (Pattern "\n") <#> map toCharArray
-  solve heatMap [ findS heatMap 0 ] Set.empty 0 # logShow
+  solve (\t' s' -> t' - s' <= 1) 'E' heatMap [ findStart 'S' heatMap 0 ] Set.empty 0 # logShow
 
 day12part2 :: Effect Unit
-day12part2 = mempty
+day12part2 = do
+  heatMap <- readTextFile UTF8 "inputs/input-day-12" <#> split (Pattern "\n") <#> map toCharArray
+  solve (\t' s' -> s' - t' <= 1) 'a' heatMap [ findStart 'E' heatMap 0 ] Set.empty 0 # logShow
+
