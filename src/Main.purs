@@ -8,6 +8,7 @@ import Day11 (day11part1, day11part2)
 import Day12 (day12part1, day12part2)
 import Day13 (day13part1, day13part2)
 import Day14 (day14part1, day14part2)
+import Day15 (day15part1, day15part2)
 import Day5 (day5part1, day5part2)
 import Day6 (day6part1, day6part2)
 import Day7 (day7part1, day7part2)
@@ -16,13 +17,12 @@ import Day9 (day9part1, day9part2)
 import Effect (Effect)
 import Effect.Class.Console (logShow)
 
-
 main :: Effect Unit
 main =
   -- day1part1
   -- *> day1part2
   -- *> day2part1
-  -- *> day2part2  
+  -- *> day2part2
   -- *> day3part1
   -- *> day3part2
   -- *> day4part1
@@ -41,9 +41,11 @@ main =
   -- *> day10part2
   -- *> day11part1
   -- *> day11part2
-     -- *> day12part1
-     -- *> day12part2
-     -- *> day13part1
-     -- *> day13part2
-     day14part1
-     *> day14part2
+  -- *> day12part1
+  -- *> day12part2
+  -- *> day13part1
+  -- *> day13part2
+  -- *> day14part1
+  -- *> day14part2
+  day15part1
+    *> day15part2
