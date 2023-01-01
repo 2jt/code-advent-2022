@@ -18,6 +18,7 @@ to generate this file without the comments in this block.
   , "debug"
   , "effect"
   , "either"
+  , "filterable"
   , "foldable-traversable"
   , "integers"
   , "lists"
@@ -25,11 +26,15 @@ to generate this file without the comments in this block.
   , "node-buffer"
   , "node-fs"
   , "numbers"
+  , "open-memoize"
   , "ordered-collections"
   , "parsing"
   , "prelude"
   , "strings"
+  , "transformers"
   , "tuples"
+  , "unfoldable"
+  , "unicode"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs" ]

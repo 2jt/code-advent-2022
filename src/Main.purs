@@ -9,6 +9,8 @@ import Day12 (day12part1, day12part2)
 import Day13 (day13part1, day13part2)
 import Day14 (day14part1, day14part2)
 import Day15 (day15part1, day15part2)
+import Day16 (day16part1, day16part2)
+import Day16Bak (day16part1Bak)
 import Day5 (day5part1, day5part2)
 import Day6 (day6part1, day6part2)
 import Day7 (day7part1, day7part2)
@@ -47,5 +49,7 @@ main =
   -- *> day13part2
   -- *> day14part1
   -- *> day14part2
-  day15part1
-    *> day15part2
+    -- *> day15part1
+    -- *> day15part2
+  day16part1
+  -- day16part1Bak
