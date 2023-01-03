@@ -1,22 +1,25 @@
-module Day16 (day16part1, day16part2) where
+module Day16 (day16) where
 
 import Prelude
 
 import Control.Alt ((<|>))
-import Data.Array (find, many)
+import Control.Monad.Error.Class (liftMaybe)
+import Data.Array (cons, find, many, partition, take)
+import Data.Array as Array
 import Data.CodePoint.Unicode (isLetter)
 import Data.Either (Either(..))
 import Data.Filterable (filter)
-import Data.Foldable (length, maximum)
-import Data.List (List(..), catMaybes, elemIndex, nub, zip)
-import Data.Maybe (Maybe(..), fromMaybe)
+import Data.Foldable (elem, length, maximum)
+import Data.List (List(..), catMaybes, fromFoldable, nub, zip, (:))
+import Data.Maybe (Maybe, fromMaybe)
 import Data.Set (Set)
 import Data.Set as Set
-import Data.Tuple (fst, snd)
+import Data.Tuple (fst)
 import Data.Tuple.Nested (type (/\), (/\))
 import Data.Unfoldable (replicate)
 import Effect (Effect)
 import Effect.Class.Console (logShow)
+import Effect.Exception (error)
 import Node.Encoding (Encoding(..))
 import Node.FS.Sync (readTextFile)
 import Parsing (Parser, runParser)
@@ -29,6 +32,10 @@ data V =
 
 instance Show V where
   show (V id rate lst) = id <> ":" <> show rate <> " [" <> show lst <> "]"
+
+getV :: Array V -> String -> Maybe V
+getV arr id =
+  flip find arr \(V id' _ _) -> id == id'
 
 parse :: Parser String (Array V)
 parse = many do
@@ -43,10 +50,6 @@ parse = many do
   newline = (char '\n' # void) <|> eof
   word = takeWhile isLetter
 
-getV :: Array V -> String -> Maybe V
-getV arr id =
-  flip find arr \(V id' _ _) -> id == id'
-
 reduceGraph :: Array V -> Array V
 reduceGraph arr = do
   (arr <#> \(V vid rate lst) -> V vid rate (loop vid 1 lst lst))
@@ -55,37 +58,44 @@ reduceGraph arr = do
   where
   loop _ _ Nil l = l
   loop vid step lst l = do
-    let
-      lstJoined = (lst <#> \(id /\ _) -> getValveLst id) # catMaybes # join <#> incBy step
-        # filter \(id /\ _) -> elemIndex id (l <#> fst) == Nothing && id /= vid
-    loop vid (step + 1) lstJoined (nub (l <> lstJoined))
-  isValveZero (id /\ _) =
-    (flip find arr \(V id' _ _) -> id == id') <#> (\(V _ r _) -> r /= 0) # fromMaybe true
+    let lstJ = (lst <#> \(id /\ _) -> getValveLst id) # catMaybes # join <#> incBy step
+    let lstJf = flip filter lstJ \(id /\ _) -> not $ elem id (l <#> fst) && id /= vid
+    loop vid (step + 1) lstJf (nub (l <> lstJf))
+  isValveZero (id /\ _) = fromMaybe true $ getV arr id <#> \(V _ r _) -> r /= 0
   incBy step (id /\ d) = id /\ (d + step)
-  getValveLst id =
-    (flip find arr \(V id' _ _) -> id == id') <#> \(V _ _ lst) -> lst
+  getValveLst id = getV arr id <#> \(V _ _ lst) -> lst
 
 solve :: Array V -> Set String -> Int -> V -> Int
-solve _ _ t _ | t <= 0 = 0
+solve _ _ t _ | t <= 1 = 0
 solve arr set t (V _ _ lst) = do
-  (catMaybes $ lst <#> fst >>> getV arr) `zip` (lst <#> snd)
-    <#> go
-    # maximum
-    # fromMaybe 0
+  let l = catMaybes $ lst <#> \(id /\ d) -> getV arr id <#> (_ /\ d)
+  l <#> go # maximum # fromMaybe 0
   where
   go (v@(V id r _) /\ d)
     | Set.member id set = 0
     | otherwise = solve arr (Set.insert id set) (t - d - 1) v + (t - d - 1) * r
 
-day16part1 :: Effect Unit
-day16part1 = do
+solve2 :: Array V -> V -> Int
+solve2 arr v = do
+  let labels = (arr <#> \(V id _ _) -> id)
+  let p = combinations (fromFoldable labels) # \p' -> take ((length p') / 2) p'
+  p <#> f # maximum # fromMaybe 0
+  where
+  f p1Labels = do
+    let { yes: p1, no: p2 } = flip partition arr \(V id _ _) -> elem id p1Labels
+    (solve p1 Set.empty 26 v) + (solve p2 Set.empty 26 v)
+  combinations Nil = []
+  combinations (x : Nil) = [ [ x ] ]
+  combinations (x : xs) = Array.nub do
+    l <- combinations xs
+    [ pure x, (cons x l), l ]
+
+day16 :: Effect Unit
+day16 = do
   readTextFile UTF8 "inputs/input-day-16" >>= flip runParser parse >>> case _ of
     Left _ -> logShow "Error parsing"
     Right arr -> do
       let arr' = reduceGraph arr
-      case getV arr' "AA" of
-        Nothing -> logShow "..."
-        Just v -> logShow $ solve arr' Set.empty 30 v
-
-day16part2 :: Effect Unit
-day16part2 = mempty
+      v <- liftMaybe (error "No AA") $ getV arr' "AA"
+      logShow $ solve arr' Set.empty 30 v
+      logShow $ solve2 (flip filter arr' \(V id _ _) -> id /= "AA") v
